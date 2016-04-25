@@ -200,32 +200,57 @@ public class NgnNetworkService  extends NgnBaseService implements INgnNetworkSer
 		final HashMap<String, InetAddress> addressMap = new HashMap<String, InetAddress>();
 		
 		try {
+			int i = 0;
+			int j = 0;
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-				final NetworkInterface intf = en.nextElement();
+                //gaojing:en,此机器上的网络接口，若找不到任何接口则为null。getNetWorkInterface()方法可以获取这台机器上的网络接口。
+				Log.d("GaoJing_BigFor", "round ("+j+")");
+                final NetworkInterface intf = en.nextElement();
 				
 				// http://code.google.com/p/imsdroid/issues/detail?id=398#c3
 				try{
+                    //gaojing: isUp()返回网络接口是否已经那个开启并运行，若是则返回true；如果发生IO错误，则抛出异常，SocketException.
 					if(NetworkInterface_isUp != null && !(Boolean)NetworkInterface_isUp.invoke(intf)){
-						Log.i(TAG, "interface=" + intf.getName() + " is not up");
+						//Log.i(TAG, "interface=" + intf.getName() + " is not up");
+						Log.d("GaoJing_Interface", "interface=" + intf.getName() + " is not up");
 						continue;
 					}
 				}
 				catch(Exception e){}
+				Log.d("GaoJing02", "test if it runned here");
 				
 				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    Log.d("SmallFor", "small round ("+i+")");
+                    //gaojing: getInetAddress()方法，返回一个具有绑定到此网络接口全部或部分InetAddress的Enumeration.
+                    //如果存在安全管理器，则对每个IntetAddress调用其checkConnect方法，只有checkConnect不抛出SecurityException的InetAddress才会在Enumeration中返回。
 					InetAddress inetAddress = enumIpAddr.nextElement();
-					Log.d(NgnNetworkService.TAG, inetAddress.getHostAddress().toString());
-					if(inetAddress.isLoopbackAddress() || ((inetAddress instanceof Inet6Address) && ((Inet6Address)inetAddress).isLinkLocalAddress())){
+					//Log.d(NgnNetworkService.TAG, inetAddress.getHostAddress().toString());
+					Log.d("GaoJing_HostAddressOfInterface", inetAddress.getHostAddress().toString());
+                    //gaojing：返回 与InetAddress对象相关的主机地址字符串
+
+                    ///* add by gaojing 
+					if(inetAddress.isLoopbackAddress() /*|| ((inetAddress instanceof Inet6Address) && ((Inet6Address)inetAddress).isLinkLocalAddress())*/){
+						addressMap.put(intf.getName(), inetAddress);
+						Log.d("GaoJing_smallFor", "interface address is loopback address, addressMap.size = ("+addressMap.size()+")");
 			    		continue;
 			    	}
+                    //*/
+                    
 					if (((inetAddress instanceof Inet4Address) && !ipv6) || ((inetAddress instanceof Inet6Address) && ipv6)) {
 						addressMap.put(intf.getName(), inetAddress);
+						Log.d("GaoJing", "intf.getName = ("+intf.getName()+"), inetAddress = ("+inetAddress+")");
+						Log.d("GaoJing_smallFor", "interface address is ipv4 address, and excute hashmap.put, addressMap.zise = ("+addressMap.size()+")");
 					}
+                    i ++;
 				}
+                j ++;
 			}
+
 			if(addressMap.size() > 0){
+				Log.d("GaoJing_addressMap.se()", "test it it runned here, addressMap.size() = ("+addressMap.size()+")");
 				// openvpn address
 				final InetAddress openvpn = addressMap.get(OPENVPN_INTERFACE_NAME);
+                Log.d("GaoJing_addressMap", "opnevpn = ("+openvpn+")");
 				if(openvpn != null){
 					final String openvpnAddr = openvpn.getHostAddress().toString();
 					if(!NgnStringUtils.isNullOrEmpty(openvpnAddr)){
@@ -236,11 +261,15 @@ public class NgnNetworkService  extends NgnBaseService implements INgnNetworkSer
 				final Iterator<Map.Entry<String, InetAddress>> it = addressMap.entrySet().iterator();
 				Map.Entry<String, InetAddress> kvp;
 			    while (it.hasNext()) {
+                    Log.d("GaoJing", "it.hasNext = ("+it.hasNext()+")");
 			    	kvp = it.next();
+                    Log.d("GaoJing", "kvp_it.next ("+kvp+")");
 			    	final InetAddress address = kvp.getValue();
+                    Log.d("GaoJing_address", "kvp.getValue = ("+address+")");
 			    	if(kvp.getKey().equals(USB_INTERFACE_NAME)){
 			    		continue;
 			    	}
+                    Log.d("GaoJing", "return address.getHostAddress("+address.getHostAddress()+")");
 				    return address.getHostAddress();
 			    }
 				return addressMap.values().iterator().next().getHostAddress();
@@ -660,25 +689,28 @@ public class NgnNetworkService  extends NgnBaseService implements INgnNetworkSer
 	}
 	
 	private void triggerSipRegistration(){
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				Log.d(TAG, "Network connection chaged: restart the stack");
-//				final ISipService sipService = ServiceManager.getSipService();
-//				final ConnectionState registrationState = sipService.getRegistrationState();
-//				switch(registrationState){
-//					case NONE:
-//					case TERMINATED:
-//						sipService.register(null);
-//						break;
-//					case CONNECTING:
-//					case TERMINATING:
-//					case CONNECTED:
-//						sipService.unRegister();
-//						sipService.register(null);
-//						break;
-//				}
-//			}
-//		}).start();
+		Log.d("GaoJing_trigger", "triggrt register");
+		/*
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Log.d(TAG, "Network connection chaged: restart the stack");
+				final ISipService sipService = ServiceManager.getSipService();
+				final ConnectionState registrationState = sipService.getRegistrationState();
+				switch(registrationState){
+					case NONE:
+					case TERMINATED:
+						sipService.register(null);
+						break;
+					case CONNECTING:
+					case TERMINATING:
+					case CONNECTED:
+						sipService.unRegister();
+						sipService.register(null);
+						break;
+				}
+			}
+		}).start();
+		*/
 	}
 }
