@@ -24,6 +24,7 @@ import org.doubango.imsdroid.Main;
 import org.doubango.imsdroid.R;
 import org.doubango.ngn.events.NgnEventArgs;
 import org.doubango.ngn.events.NgnRegistrationEventArgs;
+import org.doubango.ngn.media.NgnMediaType;
 import org.doubango.ngn.services.INgnSipService;
 import org.doubango.ngn.sip.NgnSipSession.ConnectionState;
 
@@ -47,6 +48,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 
 public class ScreenHome extends BaseScreen {
@@ -74,18 +76,29 @@ public class ScreenHome extends BaseScreen {
 		
 		mGridView = (GridView) findViewById(R.id.screen_home_gridview);
 		mGridView.setAdapter(new ScreenHomeAdapter(this));
+        
+        if(!mSipService.isRegistered()){
+            mSipService.register(ScreenHome.this); //add by gaojing:register default
+        }
+
 		mGridView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 				final ScreenHomeItem item = (ScreenHomeItem)parent.getItemAtPosition(position);
 				if (item != null) {
-					if(position == ScreenHomeItem.ITEM_SIGNIN_SIGNOUT_POS){
+					Log.d("GaoJIng", "item is ("+item+")");
+					Log.d("GaoJing", "position is ("+position+")");
+					
+                    if(position == ScreenHomeItem.ITEM_SIGNIN_SIGNOUT_POS){
 						if(mSipService.getRegistrationState() == ConnectionState.CONNECTING || mSipService.getRegistrationState() == ConnectionState.TERMINATING){
+                            Log.d("GaoJing", "test01");
 							mSipService.stopStack();
 						}
 						else if(mSipService.isRegistered()){
+                            Log.d("GaoJing", "test02");
 							mSipService.unRegister();
 						}
 						else{
+                            Log.d("GaoJing", "test03");
 							mSipService.register(ScreenHome.this);
 						}
 					}
@@ -108,6 +121,43 @@ public class ScreenHome extends BaseScreen {
 										dialog.cancel();
 									}
 								});
+						dialog.show();
+					}
+					else if ((position == ScreenHomeItem.ITEM_CONTACT_1_POS)
+							|| (position == ScreenHomeItem.ITEM_CONTACT_2_POS)
+							|| (position == ScreenHomeItem.ITEM_CONTACT_3_POS)
+							|| (position == ScreenHomeItem.ITEM_CONTACT_4_POS)){
+						final AlertDialog dialog = CustomDialog.create(ScreenHome.this,
+								R.drawable.phone_call_25,
+								null,
+								"Are you sure you want to call this person?",
+								"Yes",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Log.d("GaoJing", "prepare to call??" );
+										//((Main)(getEngine().getMainActivity())).exit();
+										int num = position + 1;
+										final String phoneNum = "100" + num;
+										Log.d("GaoJing", "phone num is ("+phoneNum+")");
+										if(!mSipService.isRegistered()) {
+                                            mSipService.register(ScreenHome.this); //add by gaojing:register default
+										}
+										else {
+											ScreenAV.makeCall(phoneNum, NgnMediaType.AudioVideo);
+											//Toast.makeText(ScreenHome.this, "Please register firstly", Toast.LENGTH_LONG).show();
+										}
+									}
+								},
+								"No",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Log.d("GaoJing", "prepare to not call??");
+										dialog.cancel();
+									}
+								}
+								);
 						dialog.show();
 					}
 					else{					
@@ -170,9 +220,10 @@ public class ScreenHome extends BaseScreen {
 		
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.d(TAG, "itemid is ("+item.getItemId()+")");
 		switch(item.getItemId()){
 			case ScreenHome.MENU_EXIT:
 				((Main)getEngine().getMainActivity()).exit();
@@ -180,6 +231,8 @@ public class ScreenHome extends BaseScreen {
 			case ScreenHome.MENU_SETTINGS:
 				mScreenService.show(ScreenSettings.class);
 				break;
+			default:
+				Log.d(TAG, "itemid is ("+item.getItemId()+")");
 		}
 		return true;
 	}
@@ -189,8 +242,13 @@ public class ScreenHome extends BaseScreen {
 	 * ScreenHomeItem
 	 */
 	static class ScreenHomeItem {
-		static final int ITEM_SIGNIN_SIGNOUT_POS = 0;
-		static final int ITEM_EXIT_POS = 1;
+		static final int ITEM_SIGNIN_SIGNOUT_POS = 4;
+		static final int ITEM_EXIT_POS = 5;
+		static final int ITEM_CONTACT_1_POS = 0;
+		static final int ITEM_CONTACT_2_POS = 1;
+		static final int ITEM_CONTACT_3_POS = 2;
+		static final int ITEM_CONTACT_4_POS = 3;
+
 		final int mIconResId;
 		final String mText;
 		final Class<? extends Activity> mClass;
@@ -206,18 +264,22 @@ public class ScreenHome extends BaseScreen {
 	 * ScreenHomeAdapter
 	 */
 	static class ScreenHomeAdapter extends BaseAdapter{
-		static final int ALWAYS_VISIBLE_ITEMS_COUNT = 4;
+		static final int ALWAYS_VISIBLE_ITEMS_COUNT = 7;
 		static final ScreenHomeItem[] sItems =  new ScreenHomeItem[]{
 			// always visible
+			new ScreenHomeItem(R.drawable.eab_48, "1001", null),
+			new ScreenHomeItem(R.drawable.eab_48, "1002", null),
+			new ScreenHomeItem(R.drawable.eab_48, "1003", null),
+			new ScreenHomeItem(R.drawable.eab_48, "1004", null),
     		new ScreenHomeItem(R.drawable.sign_in_48, "Sign In", null),
     		new ScreenHomeItem(R.drawable.exit_48, "Exit/Quit", null),
     		new ScreenHomeItem(R.drawable.options_48, "Options", ScreenSettings.class),
-    		new ScreenHomeItem(R.drawable.about_48, "About", ScreenAbout.class),
-    		// visible only if connected
-    		new ScreenHomeItem(R.drawable.dialer_48, "Dialer", ScreenTabDialer.class),
-    		new ScreenHomeItem(R.drawable.eab2_48, "Address Book", ScreenTabContacts.class),
-    		new ScreenHomeItem(R.drawable.history_48, "History", ScreenTabHistory.class),
-    		new ScreenHomeItem(R.drawable.chat_48, "Messages", ScreenTabMessages.class),
+			//new ScreenHomeItem(R.drawable.about_48, "About", ScreenAbout.class),
+			// visible only if connected
+    		//new ScreenHomeItem(R.drawable.dialer_48, "Dialer", ScreenTabDialer.class),
+    		//new ScreenHomeItem(R.drawable.eab2_48, "Address Book", ScreenTabContacts.class),
+    		//new ScreenHomeItem(R.drawable.history_48, "History", ScreenTabHistory.class),
+    		//new ScreenHomeItem(R.drawable.chat_48, "Messages", ScreenTabMessages.class),
 		};
 		
 		private final LayoutInflater mInflater;
