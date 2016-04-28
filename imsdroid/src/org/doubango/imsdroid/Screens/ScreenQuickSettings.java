@@ -69,48 +69,15 @@ public class ScreenQuickSettings extends BaseScreen {
             String impi = mEtIMPI.getText().toString();
             String networkRealm = mEtRealm.getText().toString();
             String impu = "sip:" + impi + "@" + networkRealm;
+            Log.d("GaoJing","00 ipmu = " + impu);
 
-
-            mEtIMPI.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                    mEtRealm.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable editable) {
-
-
-                        }
-                    });
-                }
-            });
 
 
 			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_DISPLAY_NAME, 
 					mEtDisplayName.getText().toString().trim());
-            mEtIMPU.setText(mConfigurationService.getString(NgnConfigurationEntry.IDENTITY_IMPU, impu));
             mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_IMPU,
-                    mEtIMPU.getText().toString().trim());
+                    impu);
+
 			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_IMPI, 
 					mEtIMPI.getText().toString().trim());
 			mConfigurationService.putString(NgnConfigurationEntry.IDENTITY_PASSWORD, 
