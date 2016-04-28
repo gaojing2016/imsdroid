@@ -102,6 +102,7 @@ public class ScreenHome extends BaseScreen {
 							mSipService.register(ScreenHome.this);
 						}
 					}
+					/*
 					else if(position == ScreenHomeItem.ITEM_EXIT_POS){
 						final AlertDialog dialog = CustomDialog.create(
 								ScreenHome.this,
@@ -123,6 +124,7 @@ public class ScreenHome extends BaseScreen {
 								});
 						dialog.show();
 					}
+					*/
 					else if ((position == ScreenHomeItem.ITEM_CONTACT_1_POS)
 							|| (position == ScreenHomeItem.ITEM_CONTACT_2_POS)
 							|| (position == ScreenHomeItem.ITEM_CONTACT_3_POS)
@@ -243,7 +245,7 @@ public class ScreenHome extends BaseScreen {
 	 */
 	static class ScreenHomeItem {
 		static final int ITEM_SIGNIN_SIGNOUT_POS = 4;
-		static final int ITEM_EXIT_POS = 5;
+		//static final int ITEM_EXIT_POS = 5;
 		static final int ITEM_CONTACT_1_POS = 0;
 		static final int ITEM_CONTACT_2_POS = 1;
 		static final int ITEM_CONTACT_3_POS = 2;
