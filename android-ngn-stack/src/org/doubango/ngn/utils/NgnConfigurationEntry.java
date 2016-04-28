@@ -164,16 +164,16 @@ public class NgnConfigurationEntry {
 	//	Identity
 	public static final String DEFAULT_IDENTITY_DISPLAY_NAME = "John Doe";
 	public static final String DEFAULT_IDENTITY_IMPU = "sip:johndoe@doubango.org";
-	public static final String DEFAULT_IDENTITY_IMPI = "johndoe";
-	public static final String DEFAULT_IDENTITY_PASSWORD = null;
+	public static final String DEFAULT_IDENTITY_IMPI = "default";
+	public static final String DEFAULT_IDENTITY_PASSWORD = "default";
 	
 	// Network
 	public static final int DEFAULT_NETWORK_REGISTRATION_TIMEOUT = 1700;
-	public static final String DEFAULT_NETWORK_REALM = "doubango.org";
+	public static final String DEFAULT_NETWORK_REALM = "172.17.62.249";
 	public static final boolean DEFAULT_NETWORK_USE_WIFI = true;
 	public static final boolean DEFAULT_NETWORK_USE_3G = false;
 	public static final String DEFAULT_NETWORK_PCSCF_DISCOVERY = "None";
-	public static final String DEFAULT_NETWORK_PCSCF_HOST = "127.0.0.1";
+	public static final String DEFAULT_NETWORK_PCSCF_HOST = "172.17.62.249";
 	public static final int DEFAULT_NETWORK_PCSCF_PORT = 5060;
 	public static final boolean DEFAULT_NETWORK_USE_SIGCOMP = false;
 	public static final String DEFAULT_NETWORK_TRANSPORT = "udp";

@@ -54,6 +54,7 @@ public abstract class BaseScreen extends Activity implements IBaseScreen {
 	private static final String TAG = BaseScreen.class.getCanonicalName();
 	public static enum SCREEN_TYPE {
 		// Well-Known
+		SCREEN_QUICK_SETTINGS_T,
 		ABOUT_T,
 		AV_QUEUE_T,
 		CHAT_T,
