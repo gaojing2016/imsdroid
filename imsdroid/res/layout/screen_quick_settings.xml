@@ -14,7 +14,15 @@
         <TextView android:visibility="gone" android:layout_height="wrap_content" android:layout_below="@+id/screen_identity_editText_displayname" android:layout_width="wrap_content" android:id="@+id/screen_identity_textView_impu" android:text="Public Identity*" android:layout_marginLeft="2px" android:textSize="20dp" android:layout_marginTop="2dp"></TextView>
         <EditText android:visibility="gone" android:layout_height="wrap_content" android:id="@+id/screen_identity_editText_impu" android:layout_below="@+id/screen_identity_textView_impu" android:layout_width="fill_parent" android:text="sip:alice@open-ims.test"></EditText>
 
-        <TextView android:layout_height="wrap_content" android:layout_below="@+id/screen_identity_editText_impu" android:layout_width="fill_parent" android:id="@+id/screen_identity_textView_impi" android:text="Private Identity*" android:textSize="20dp" android:layout_marginTop="2dp"></TextView>
+        <Button
+            android:id="@+id/screen_wifi_quick_setting" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/screen_identity_editText_impu"
+            android:text="Wi-Fi Quick Setting"
+            />
+
+        <TextView android:layout_height="wrap_content" android:layout_below="@+id/screen_wifi_quick_setting" android:layout_width="fill_parent" android:id="@+id/screen_identity_textView_impi" android:text="Private Identity*" android:textSize="20dp" android:layout_marginTop="2dp"></TextView>
         <EditText android:layout_height="wrap_content" android:id="@+id/screen_identity_editText_impi" android:layout_width="fill_parent" android:layout_below="@+id/screen_identity_textView_impi" android:text="alice@open-ims.test" android:hint="Please input your sip number here"></EditText>
 
         <TextView android:layout_height="wrap_content" android:id="@+id/screen_identity_textView_password" android:layout_width="fill_parent" android:layout_below="@+id/screen_identity_editText_impi" android:text="Password" android:textSize="20dp" android:layout_marginTop="2dp"></TextView>

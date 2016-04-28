@@ -1,9 +1,13 @@
 package org.doubango.imsdroid.Screens;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -37,6 +41,14 @@ public class ScreenQuickSettings extends BaseScreen {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_quick_settings);
+
+        Button wifiQuickSetting = (Button)findViewById(R.id.screen_wifi_quick_setting);
+        wifiQuickSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+            }
+        });
 
         mEtDisplayName = (EditText)findViewById(R.id.screen_identity_editText_displayname);
         mEtIMPU = (EditText)findViewById(R.id.screen_identity_editText_impu);
