@@ -28,6 +28,7 @@
         <activity android:name=".Screens.ScreenSettings"></activity>
         <activity android:name=".Screens.ScreenTabMessages"></activity>
         <activity android:name=".Screens.ScreenGeneral"></activity>
+        <activity android:name=".Screens.ScreenQuickSettings"></activity>
         <activity android:name=".Screens.ScreenIdentity"></activity>
         <activity android:name=".Screens.ScreenNetwork"></activity>
         <activity android:name=".Screens.ScreenCodecs"></activity>
