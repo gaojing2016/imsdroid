@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import org.doubango.imsdroid.R;
 import org.doubango.ngn.services.INgnConfigurationService;
+import org.doubango.ngn.services.INgnSipService;
 import org.doubango.ngn.utils.NgnConfigurationEntry;
 import org.doubango.ngn.utils.NgnStringUtils;
 
@@ -22,6 +23,7 @@ import org.doubango.ngn.utils.NgnStringUtils;
 public class ScreenQuickSettings extends BaseScreen {
     private final static String TAG = ScreenQuickSettings.class.getCanonicalName();
     private final INgnConfigurationService mConfigurationService;
+    private final INgnSipService mSipService;
 
     private EditText mEtDisplayName;
     private EditText mEtIMPU;
@@ -36,6 +38,7 @@ public class ScreenQuickSettings extends BaseScreen {
         super(SCREEN_TYPE.SCREEN_QUICK_SETTINGS_T, TAG);
 
         mConfigurationService = getEngine().getConfigurationService();
+        mSipService = getEngine().getSipService();
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,12 @@ public class ScreenQuickSettings extends BaseScreen {
 					mCbEarlyIMS.isChecked());
 			mConfigurationService.putString(NgnConfigurationEntry.NETWORK_PCSCF_HOST,
 					mProxyHost.getText().toString().trim());
-			
+
+            if(mSipService.isRegistered()){
+                Log.d("GaoJing", "already registered, should make it unregister firstly");
+                mSipService.unRegister();
+            }
+
 			// Compute
 			if(!mConfigurationService.commit()){
 				Log.e(TAG, "Failed to Commit() configuration");
