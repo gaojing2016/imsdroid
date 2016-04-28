@@ -264,7 +264,7 @@ public class ScreenHome extends BaseScreen {
 	 * ScreenHomeAdapter
 	 */
 	static class ScreenHomeAdapter extends BaseAdapter{
-		static final int ALWAYS_VISIBLE_ITEMS_COUNT = 7;
+		static final int ALWAYS_VISIBLE_ITEMS_COUNT = 6;
 		static final ScreenHomeItem[] sItems =  new ScreenHomeItem[]{
 			// always visible
 			new ScreenHomeItem(R.drawable.eab_48, "1001", null),
@@ -272,7 +272,7 @@ public class ScreenHome extends BaseScreen {
 			new ScreenHomeItem(R.drawable.eab_48, "1003", null),
 			new ScreenHomeItem(R.drawable.eab_48, "1004", null),
     		new ScreenHomeItem(R.drawable.sign_in_48, "Sign In", null),
-    		new ScreenHomeItem(R.drawable.exit_48, "Exit/Quit", null),
+    		//new ScreenHomeItem(R.drawable.exit_48, "Exit/Quit", null),
     		//new ScreenHomeItem(R.drawable.options_48, "Options", ScreenSettings.class),
 			new ScreenHomeItem(R.drawable.options_48, "QuickSettings", ScreenQuickSettings.class),
 			//new ScreenHomeItem(R.drawable.about_48, "About", ScreenAbout.class),
